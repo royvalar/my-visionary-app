@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
 const Header = () => {
@@ -32,7 +32,12 @@ const Header = () => {
 
     const handleAuthClick = async () => {
         if (user) {
-            router.push('/dashboard');
+            try {
+                await signOut(auth);
+                router.push('/');
+            } catch (error: any) {
+                console.error('Error signing out:', error.message);
+            }
         } else {
             const provider = new GoogleAuthProvider();
             try {
@@ -107,7 +112,7 @@ const Header = () => {
                         onClick={handleAuthClick}
                         className="border border-copper/50 px-8 py-3 text-[11px] font-bold text-copper uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500 rounded-full"
                     >
-                        {user ? 'אזור אישי' : 'כניסה לאדריכלים/מעצבים'}
+                        {user ? 'התנתקות' : 'כניסה לאדריכלים/מעצבים'}
                     </button>
                 </div>
             </div>

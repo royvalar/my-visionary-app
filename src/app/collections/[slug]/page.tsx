@@ -3,8 +3,9 @@ import Footer from "@/components/layout/Footer";
 import { collections } from "@/data/collections";
 import { notFound } from "next/navigation";
 
-export default function CollectionPage({ params }: { params: { slug: string } }) {
-    const collection = collections.find((c) => c.slug === params.slug);
+export default async function CollectionPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const collection = collections.find((c) => c.slug === slug);
 
     if (!collection) {
         notFound();
