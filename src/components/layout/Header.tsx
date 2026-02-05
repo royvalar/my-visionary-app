@@ -105,7 +105,7 @@ const Header = () => {
                             )}
                         </li>
                         <li>
-                            <Link href="/#architects" className="hover:text-copper transition-all duration-300">
+                            <Link href="/community" className="hover:text-copper transition-all duration-300">
                                 קהילת אדריכלים/מעצבים
                             </Link>
                         </li>
@@ -118,11 +118,11 @@ const Header = () => {
                         <div className="relative" ref={userRef}>
                             <button
                                 onClick={() => setIsUserOpen(!isUserOpen)}
-                                className="flex items-center gap-4 bg-white/[0.03] border border-white/10 hover:border-copper/50 transition-all duration-300 px-4 py-2 rounded-full group"
+                                className="flex items-center gap-4 bg-white/[0.03] border border-white/10 hover:border-copper/50 transition-all duration-300 px-5 py-2 rounded-full group min-w-fit"
                             >
-                                <div className="text-right">
-                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold leading-none mb-1">Hello,</p>
-                                    <p className="text-[11px] text-white font-bold tracking-wider">{user.displayName?.split(' ')[0]}</p>
+                                <div className="text-right whitespace-nowrap">
+                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold leading-none mb-1 text-left">Hello,</p>
+                                    <p className="text-[12px] text-white font-bold tracking-wider">{user.displayName}</p>
                                 </div>
                                 {user.photoURL && (
                                     <img

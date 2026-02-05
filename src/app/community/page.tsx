@@ -40,10 +40,47 @@ export default function CommunityPage() {
                 // For now fetching all approved or pending for demo, usually where('status', '==', 'approved')
                 const q = query(postsRef, orderBy('createdAt', 'desc'));
                 const querySnapshot = await getDocs(q);
-                const fetchedPosts: CommunityPost[] = [];
+                let fetchedPosts: CommunityPost[] = [];
                 querySnapshot.forEach((doc) => {
                     fetchedPosts.push({ id: doc.id, ...doc.data() } as CommunityPost);
                 });
+
+                // Mock data if empty
+                if (fetchedPosts.length === 0) {
+                    fetchedPosts = [
+                        {
+                            id: 'mock1',
+                            imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1470&auto=format&fit=crop',
+                            userId: 'mock',
+                            userName: 'דנה כהן עיצוב פנים',
+                            userPhoto: 'https://i.pravatar.cc/150?u=dana',
+                            createdAt: new Date(),
+                            status: 'approved',
+                            category: 'Kitchen'
+                        },
+                        {
+                            id: 'mock2',
+                            imageUrl: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1374&auto=format&fit=crop',
+                            userId: 'mock',
+                            userName: 'איתי לוי אדריכלות',
+                            userPhoto: 'https://i.pravatar.cc/150?u=itay',
+                            createdAt: new Date(),
+                            status: 'approved',
+                            category: 'Architecture'
+                        },
+                        {
+                            id: 'mock3',
+                            imageUrl: 'https://images.unsplash.com/photo-1620027131048-fd4425c48855?q=80&w=1471&auto=format&fit=crop',
+                            userId: 'mock',
+                            userName: 'מיכל רות פרידמן',
+                            userPhoto: 'https://i.pravatar.cc/150?u=michal',
+                            createdAt: new Date(),
+                            status: 'approved',
+                            category: 'Living Room'
+                        }
+                    ];
+                }
+
                 setPosts(fetchedPosts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
@@ -81,8 +118,8 @@ export default function CommunityPage() {
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id)}
                             className={`px-6 py-2 text-[10px] uppercase font-bold tracking-widest transition-all duration-300 rounded-full border ${selectedCategory === cat.id
-                                    ? 'bg-copper border-copper text-white'
-                                    : 'bg-transparent border-white/10 text-white/40 hover:border-white/30 hover:text-white'
+                                ? 'bg-copper border-copper text-white'
+                                : 'bg-transparent border-white/10 text-white/40 hover:border-white/30 hover:text-white'
                                 }`}
                         >
                             {cat.label}
