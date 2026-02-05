@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Classic Collection | My Visionary</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#050505',
+                        offWhite: '#E5E5E5',
+                        copper: '#B87333',
+                    },
+                    fontFamily: {
+                        sans: ['"Open Sans"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #E5E5E5;
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .hero-bg {
+            background-image: linear-gradient(rgba(5, 5, 5, 0.4), rgba(5, 5, 5, 0.7)), url('https://images.unsplash.com/photo-1571175432270-ef02d8471443?q=80&w=1374&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
+        }
+    </style>
+</head>
+
+<body x-data="{ loaded: false }" x-init="setTimeout(() => loaded = true, 100)">
+
+    <!-- Standardized Header -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <div class="text-2xl font-extrabold text-copper tracking-tighter uppercase italic">
+                My Visionary
+            </div>
+            <ul class="hidden lg:flex items-center gap-12 text-[11px] tracking-[0.2em] uppercase font-bold"
+                x-data="{ open: false }">
+                <li><a href="index.html" class="text-copper hover:text-white transition-all duration-300">עמוד הבית</a>
+                </li>
+                <li class="relative" @click.away="open = false">
+                    <button @click="open = !open"
+                        class="flex items-center gap-2 hover:text-copper transition-all duration-300 uppercase tracking-widest font-bold focus:outline-none">
+                        קולקציות
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transition-transform duration-300"
+                            :class="open && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        class="absolute top-full right-0 mt-4 w-56 bg-black/95 backdrop-blur-xl border border-white/10 shadow-2xl py-6 z-[100] text-right"
+                        style="display: none;">
+                        <a href="rose-gold.html"
+                            class="block px-8 py-3 text-[10px] hover:text-copper transition-colors border-b border-white/5 last:border-0 uppercase tracking-widest">Rose
+                            Gold</a>
+                        <a href="retro-classic.html"
+                            class="block px-8 py-3 text-[10px] hover:text-copper transition-colors border-b border-white/5 last:border-0 uppercase tracking-widest">Retro
+                            Classic</a>
+                        <a href="matte-black.html"
+                            class="block px-8 py-3 text-[10px] hover:text-copper transition-colors last:border-0 uppercase tracking-widest">Matte
+                            Black</a>
+                    </div>
+                </li>
+                <li><a href="index.html#architects" class="hover:text-copper transition-all duration-300">קהילת
+                        אדריכלים/מעצבים</a></li>
+            </ul>
+            <div class="hidden lg:block">
+                <button
+                    class="border border-copper/50 px-8 py-3 text-[11px] font-bold text-copper uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500 rounded-full">
+                    כניסה לאדריכלים/מעצבים
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="h-screen flex items-center justify-center text-center hero-bg relative px-6">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black"></div>
+        <div class="max-w-4xl relative z-10 transition-all duration-1000 transform"
+            :class="loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'">
+            <p class="text-copper mb-4 tracking-[0.4em] uppercase text-xs font-bold">Nostalgic Heritage</p>
+            <h1 class="text-5xl md:text-[5rem] font-extrabold mb-6 leading-none text-white uppercase italic">
+                Retro Classic
+            </h1>
+            <p class="text-lg md:text-xl font-light tracking-wide max-w-2xl mx-auto text-offWhite/70">
+                קולקציית Retro Classic מפיחה חיים חדשים באסתטיקה של שנות ה-50 דרך מותגי על כמו SMEG ו-La Pavoni. עיצוב
+                איקוני שלא נס ליחו.
+            </p>
+        </div>
+    </header>
+
+    <!-- Zig-Zag Catalog Section -->
+    <main class="py-20 space-y-32">
+
+        <!-- Product 1: Smeg FAB Fridge -->
+        <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div class="space-y-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-px bg-copper"></div>
+                    <span class="text-copper text-xs font-bold uppercase tracking-widest">SMEG • FAB Series</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">מקרר SMEG FAB28 הקלאסי</h2>
+                <p class="text-lg text-offWhite/50 leading-relaxed font-light">
+                    סמל העיצוב של SMEG. מקרר בעל קווים מעוגלים, ידית כרום מסיבית ונוכחות שאי אפשר להתעלם ממנה. שילוב בין
+                    רטרו איטלקי לטכנולוגיית קירור מודרנית וחסכונית.
+                </p>
+                <div class="pt-6">
+                    <a href="#"
+                        class="inline-block bg-white text-black px-10 py-4 text-xs font-bold uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500">
+                        לעוד פרטים בעמוד המותג Smeg
+                    </a>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="aspect-[4/5] bg-white/5 overflow-hidden">
+                    <img src="fridge.png" alt="Smeg FAB Fridge"
+                        class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+                </div>
+            </div>
+        </section>
+
+        <!-- Product 2: La Pavoni Espresso Machine -->
+        <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div class="order-2 md:order-1 relative group">
+                <div class="aspect-[4/5] bg-white/5 overflow-hidden">
+                    <img src="espresso.png" alt="La Pavoni Espresso Machine"
+                        class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+                </div>
+            </div>
+            <div class="order-1 md:order-2 space-y-8 text-right">
+                <div class="flex items-center justify-end gap-4">
+                    <span class="text-copper text-xs font-bold uppercase tracking-widest">La Pavoni • Heritage</span>
+                    <div class="w-12 h-px bg-copper"></div>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">מכונת אספרסו La Pavoni</h2>
+                <p class="text-lg text-offWhite/50 leading-relaxed font-light">
+                    אמנות הקפה בעבודת יד. מכונת האספרסו של La Pavoni משלבת פליז מבריק וטכניקה מסורתית, ומציעה את חווית
+                    הבריסטה המקצועית בעיצוב שמתכתב עם ההיסטוריה המפוארת של איטליה.
+                </p>
+                <div class="pt-6">
+                    <a href="#"
+                        class="inline-block bg-white text-black px-10 py-4 text-xs font-bold uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500">
+                        לעוד פרטים בעמוד המותג La Pavoni
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product 3: Haden Heritage Set -->
+        <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div class="space-y-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-px bg-copper"></div>
+                    <span class="text-copper text-xs font-bold uppercase tracking-widest">Haden • Heritage
+                        Collection</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">סט מוצרי בוקר Haden</h2>
+                <p class="text-lg text-offWhite/50 leading-relaxed font-light">
+                    קולקציית ה-Heritage של מותג Haden הבריטי מביאה צבעוניות נוסטלגית ופרטים מעוגלים לקומקום ולטוסטר.
+                    השלמה מושלמת למטבח שמעריך עיצוב של פעם עם ביצועים של היום.
+                </p>
+                <div class="pt-6">
+                    <a href="#"
+                        class="inline-block bg-white text-black px-10 py-4 text-xs font-bold uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500">
+                        לעוד פרטים בעמוד המותג Haden
+                    </a>
+                </div>
+            </div>
+            <div class="relative group">
+                <div class="aspect-[4/5] bg-white/5 overflow-hidden">
+                    <img src="retro_group.png" alt="Haden Heritage Set"
+                        class="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-32 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-24 text-right">
+                <div class="lg:col-span-2 space-y-10">
+                    <div class="text-4xl font-black text-copper uppercase tracking-tighter">My Visionary</div>
+                    <p class="text-offWhite/30 leading-relaxed max-w-md text-lg">
+                        אנחנו מגדירים מחדש את החוויה של בחירת מטבח יוקרה. שפה חזותית אחידה המאגדת מותגים, עיצוב
+                        וטכנולוגיה.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-[11px] font-bold uppercase tracking-[0.3em] text-copper mb-10">ניווט</h4>
+                    <ul class="space-y-6 text-offWhite/60 text-sm font-light">
+                        <li><a href="#" class="hover:text-copper transition-colors">הסיפור שלנו</a></li>
+                        <li><a href="index.html#collections" class="hover:text-copper transition-colors">קולקציות</a>
+                        </li>
+                        <li><a href="index.html#architects" class="hover:text-copper transition-colors">מעצבים</a></li>
+                        <li><a href="#" class="hover:text-copper transition-colors">צור קשר</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-[11px] font-bold uppercase tracking-[0.3em] text-copper mb-10">קשר</h4>
+                    <ul class="space-y-6 text-offWhite/60 text-sm font-light">
+                        <li dir="ltr" class="hover:text-copper cursor-pointer transition-colors">info@myvisionary.com
+                        </li>
+                        <li dir="ltr" class="hover:text-copper cursor-pointer transition-colors">+972 (0) 54 123 4567
+                        </li>
+                        <li class="font-normal opacity-40">תערוכה: שדרות רוטשילד, תל אביב</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-offWhite/20 uppercase tracking-[0.3em] font-bold">
+                <p>© 2026 My Visionary Collective. All rights reserved.</p>
+                <div class="flex gap-12">
+                    <a href="#" class="hover:text-copper transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-copper transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

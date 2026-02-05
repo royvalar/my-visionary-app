@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Visionary | אוצרות של עיצוב למטבח</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#050505',
+                        offWhite: '#E5E5E5',
+                        copper: '#B87333',
+                    },
+                    fontFamily: {
+                        sans: ['"Open Sans"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #E5E5E5;
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .hero-bg {
+            background-image: linear-gradient(rgba(5, 5, 5, 0.7), rgba(5, 5, 5, 0.7)), url('hero.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(15px);
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #B87333;
+        }
+
+        /* Ensure specific heights for alignment */
+        .collection-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .collection-title-box {
+            height: 120px;
+            /* Consistent box for title and subtitle */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .collection-desc-box {
+            height: 80px;
+            /* Consistent box for description */
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body x-data="visionaryApp()">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <!-- Logo (Right) -->
+            <div class="text-2xl font-extrabold text-copper tracking-tighter uppercase italic">
+                My Visionary
+            </div>
+
+            <!-- Links (Center) -->
+            <ul class="hidden lg:flex items-center gap-12 text-[11px] tracking-[0.2em] uppercase font-bold"
+                x-data="{ open: false }">
+                <li><a href="index.html" class="text-copper hover:text-white transition-all duration-300">עמוד הבית</a>
+                </li>
+                <li class="relative" @click.away="open = false">
+                    <button @click="open = !open"
+                        class="flex items-center gap-2 hover:text-copper transition-all duration-300 uppercase tracking-widest font-bold focus:outline-none">
+                        קולקציות
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 transition-transform duration-300"
+                            :class="open && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        class="absolute top-full right-0 mt-4 w-56 bg-black/95 backdrop-blur-xl border border-white/10 shadow-2xl py-6 z-[100] text-right"
+                        style="display: none;">
+                        <a href="rose-gold.html"
+                            class="block px-8 py-3 text-[10px] hover:text-copper transition-colors border-b border-white/5 last:border-0 uppercase tracking-widest">Rose
+                            Gold</a>
+                        <a href="retro-classic.html"
+                            class="block px-8 py-3 text-[10px] hover:text-copper transition-colors border-b border-white/5 last:border-0 uppercase tracking-widest">Retro
+                            Classic</a>
+                        <a href="matte-black.html"
+                            class="block px-8 py-3 text-[10px] hover:text-copper transition-colors last:border-0 uppercase tracking-widest">Matte
+                            Black</a>
+                    </div>
+                </li>
+                <li><a href="#architects" class="hover:text-copper transition-all duration-300">קהילת
+                        אדריכלים/מעצבים</a></li>
+            </ul>
+
+            <!-- Action (Left) -->
+            <div class="hidden lg:block">
+                <button
+                    class="border border-copper/50 px-8 py-3 text-[11px] font-bold text-copper uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500 rounded-full">
+                    כניסה לאדריכלים/מעצבים
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="h-screen flex items-center justify-center text-center hero-bg px-6 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black"></div>
+        <div class="max-w-5xl relative z-10" x-data="{ loaded: false }" x-init="setTimeout(() => loaded = true, 300)">
+            <p class="text-copper mb-6 tracking-[0.4em] uppercase text-xs font-bold opacity-0 translate-y-4 transition-all duration-1000"
+                :class="loaded && 'opacity-100 translate-y-0'">Curating the Exceptional</p>
+            <h1 class="text-6xl md:text-[6rem] font-extrabold mb-8 leading-none opacity-0 translate-y-8 transition-all duration-[1200ms] delay-300"
+                :class="loaded && 'opacity-100 translate-y-0'">
+                האמנות שבמטבח
+            </h1>
+            <p class="text-xl md:text-2xl font-light tracking-wide mb-12 max-w-2xl mx-auto text-offWhite/70 opacity-0 translate-y-8 transition-all duration-[1200ms] delay-500"
+                :class="loaded && 'opacity-100 translate-y-0'">
+                My Visionary מאגדת את מותגי היוקרה המובילים לקולקציות הרמוניות. אנחנו בונים גשר עיצובי בין טכנולוגיה
+                לאסתטיקה.
+            </p>
+            <div class="opacity-0 translate-y-8 transition-all duration-[1200ms] delay-700"
+                :class="loaded && 'opacity-100 translate-y-0'">
+                <a href="#collections"
+                    class="inline-block bg-copper text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all duration-500 shadow-2xl">
+                    לגלות את הקולקציות
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curation Message -->
+    <section class="py-32 bg-black border-y border-white/5">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-extrabold mb-10 leading-tight">אינטגרציה אסתטית בין מותגים</h2>
+            <p class="text-lg text-offWhite/50 leading-relaxed">
+                המשימה שלנו היא לייצר סדר בעולם של אפשרויות. אנחנו בונים קולקציות המבוססות על חומרים, צבעים וסגנונות
+                חיים – ומאגדים תחתיהן את מכשירי המטבח הטובים בעולם כדי לייצר חלל אחד שלם והרמוני.
+            </p>
+        </div>
+    </section>
+
+    <!-- Project Collections -->
+    <section id="collections" class="py-32 max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-24">
+            <div class="text-right">
+                <p class="text-copper mb-4 text-xs tracking-widest uppercase font-bold">The Gallery</p>
+                <h2 class="text-5xl md:text-6xl font-extrabold text-white">הקולקציות שלנו</h2>
+            </div>
+            <div class="text-offWhite/40 text-[11px] mt-6 md:mt-0 italic uppercase tracking-widest">
+                Curated by Theme, Style, and Substance
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
+            <template x-for="collection in collections" :key="collection.id">
+                <div class="collection-card group">
+                    <div class="relative overflow-hidden mb-8 aspect-[4/5] bg-white/5">
+                        <img :src="collection.image" :alt="collection.name"
+                            class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+                        <!-- Product List (Hidden by default, visible on hover) -->
+                        <div
+                            class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-700 flex flex-col items-center justify-center p-12 text-center">
+                            <h4
+                                class="text-copper text-sm tracking-[0.3em] font-bold mb-8 transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
+                                מכשירי הקולקציה</h4>
+                            <ul class="space-y-4 mb-10">
+                                <template x-for="appliance in collection.appliances">
+                                    <li class="text-white/80 text-[11px] tracking-widest transition-transform duration-500 translate-y-4 group-hover:translate-y-0"
+                                        x-text="appliance"></li>
+                                </template>
+                            </ul>
+                            <a :href="collection.link"
+                                class="bg-white text-black px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-copper hover:text-white transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                                לקולקצייה
+                            </a>
+                        </div>
+                    </div>
+                    <div class="space-y-6 flex-grow flex flex-col">
+                        <div class="collection-title-box border-b border-white/10 pb-6">
+                            <h3 class="text-3xl font-bold text-white mb-2" x-text="collection.name"></h3>
+                            <p class="text-[10px] text-copper uppercase tracking-[0.3em] font-black"
+                                x-text="collection.subtitle"></p>
+                        </div>
+                        <div class="collection-desc-box pt-4">
+                            <p class="text-sm text-offWhite/50 font-light leading-relaxed"
+                                x-text="collection.description"></p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <template x-for="brand in collection.brands">
+                                <span
+                                    class="px-3 py-1 border border-white/10 text-[9px] uppercase tracking-widest text-offWhite/40 group-hover:border-copper/40 group-hover:text-copper transition-colors"
+                                    x-text="brand"></span>
+                            </template>
+                        </div>
+
+                        <div class="mt-auto">
+                            <a :href="collection.link"
+                                class="inline-flex items-center gap-3 text-copper text-[11px] font-bold uppercase tracking-widest hover:text-white transition-all group/link">
+                                לפרטי הקולקציה המלאים
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 transition-transform group-hover/link:translate-x-[-4px]" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </section>
+
+    <!-- Social Hub -->
+    <section id="architects" class="py-32 bg-white/[0.02] border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-24">
+                <div class="lg:col-span-1 space-y-12">
+                    <div class="text-right">
+                        <h2 class="text-5xl font-extrabold mb-6 text-white">קהילת האדריכלים והמעצבים</h2>
+                        <p class="text-offWhite/60 leading-relaxed">
+                            פלטפורמה המיועדת למקצוענים שרואים את המטבח כמרכז היצירה. שתפו את הפרויקטים שלכם המשלבים את
+                            קולקציות My Visionary וקבלו במה בלעדית בקהילת העיצוב שלנו.
+                        </p>
+                    </div>
+                    <div class="bg-copper/10 border border-copper/30 p-12 text-right">
+                        <h4 class="text-xl font-bold mb-4 text-copper italic tracking-tight">הצטרפות למועדון האדריכלים
+                            והמעצבים
+                        </h4>
+                        <p class="text-sm mb-10 text-offWhite/70 leading-relaxed font-light">קבלו גישה לכלים תכנוניים,
+                            קטלוגים מאוגדים וייעוץ אישי לבניית קולקציות מותאמות לקוח.</p>
+                        <button
+                            class="w-full bg-copper py-5 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all shadow-xl">
+                            הרשמה לקהילה
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="relative h-[600px] group overflow-hidden shadow-2xl">
+                        <img src="community1.png"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-10 right-10 text-right">
+                            <span
+                                class="text-[10px] uppercase tracking-[0.3em] text-copper mb-2 block font-bold">Featured
+                                Project</span>
+                            <h3 class="text-2xl font-bold text-white">דנה כהן עיצוב פנים</h3>
+                            <p class="text-[11px] text-offWhite/40 italic font-light mt-1">וילת יוקרה, הרצליה פיתוח</p>
+                        </div>
+                    </div>
+                    <div class="relative h-[600px] group overflow-hidden shadow-2xl">
+                        <img src="community2.png"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-10 right-10 text-right">
+                            <span
+                                class="text-[10px] uppercase tracking-[0.3em] text-copper mb-2 block font-bold">Architect
+                                Insight</span>
+                            <h3 class="text-2xl font-bold text-white">אדריכל אלון לוי</h3>
+                            <p class="text-[11px] text-offWhite/40 italic font-light mt-1">פנטהאוז מנהטן, תל אביב</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-32 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-24 text-right">
+                <div class="lg:col-span-2 space-y-10">
+                    <div class="text-4xl font-black text-copper uppercase tracking-tighter">My Visionary</div>
+                    <p class="text-offWhite/30 leading-relaxed max-w-md text-lg">
+                        אנחנו מגדירים מחדש את החוויה של בחירת מטבח יוקרה. שפה חזותית אחידה המאגדת מותגים, עיצוב
+                        וטכנולוגיה.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-[11px] font-bold uppercase tracking-[0.3em] text-copper mb-10">ניווט</h4>
+                    <ul class="space-y-6 text-offWhite/60 text-sm font-light">
+                        <li><a href="#" class="hover:text-copper transition-colors">הסיפור שלנו</a></li>
+                        <li><a href="#collections" class="hover:text-copper transition-colors">קולקציות</a></li>
+                        <li><a href="#architects" class="hover:text-copper transition-colors">מעצבים</a></li>
+                        <li><a href="#" class="hover:text-copper transition-colors">צור קשר</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-[11px] font-bold uppercase tracking-[0.3em] text-copper mb-10">קשר</h4>
+                    <ul class="space-y-6 text-offWhite/60 text-sm font-light">
+                        <li dir="ltr" class="hover:text-copper cursor-pointer transition-colors">info@myvisionary.com
+                        </li>
+                        <li dir="ltr" class="hover:text-copper cursor-pointer transition-colors">+972 (0) 54 123 4567
+                        </li>
+                        <li class="font-normal opacity-40">תערוכה: שדרות רוטשילד, תל אביב</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-offWhite/20 uppercase tracking-[0.3em] font-bold">
+                <p>© 2026 My Visionary Collective. All rights reserved.</p>
+                <div class="flex gap-12">
+                    <a href="#" class="hover:text-copper transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-copper transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function visionaryApp() {
+            return {
+                collections: [
+                    {
+                        id: 1,
+                        name: "Rose Gold Collection",
+                        subtitle: "Metallic Warmth & Elegance",
+                        description: "קולקציה המאחדת מותגים שונים סביב גוון הנחושת והזהב הוורוד. מהתנור ועד לקומקום, הכל בסנכרון חומרי מושלם.",
+                        image: "oven.png",
+                        link: "rose-gold.html",
+                        brands: ["Bertazzoni", "Smeg", "Gessi"],
+                        appliances: ["תנור בנוי", "קומקום מעוצב", "ברז מטבח", "ידיות זהב"]
+                    },
+                    {
+                        id: 2,
+                        name: "Retro Classic",
+                        subtitle: "Timeless Mid-Century Soul",
+                        description: "אוצרות של מכשירי מטבח המביאים את הקסם של שנות ה-50 למאה ה-21. עיצוב מעוגל וצבעוניות רכה שיוצרים חמימות נוסטלגית.",
+                        image: "retro_group.png",
+                        link: "retro-classic.html",
+                        brands: ["Smeg", "La Pavoni", "Haden"],
+                        appliances: ["מכונת אספרסו רטרו", "מצנם מעוצב", "קומקום קלאסי"]
+                    },
+                    {
+                        id: 3,
+                        name: "Matte Black Collection",
+                        subtitle: "Modern Architectural Depth",
+                        description: "חיבור בין אדריכלות מודרנית לחומרים כהים. מכשירי מטבח בגימור שחור מט עמוק שנטמעים בתוך חללים מינימליסטיים.",
+                        image: "matte_black_group.png",
+                        link: "matte-black.html",
+                        brands: ["Gaggenau", "Miele", "Wolf"],
+                        appliances: ["כיריים אינדוקציה", "מכונת קפה בנויה", "מקרר יינות"]
+                    }
+                ]
+            }
+        }
+    </script>
+</body>
+
+</html>
