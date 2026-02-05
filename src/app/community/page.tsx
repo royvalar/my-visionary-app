@@ -155,10 +155,11 @@ export default function CommunityPage() {
                 ) : filteredPosts.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {filteredPosts.map((post) => (
-                            <div
+                            <button
                                 key={post.id}
                                 onClick={() => setSelectedImage(post.imageUrl)}
-                                className="relative h-[600px] group overflow-hidden shadow-2xl cursor-zoom-in animate-fade-in"
+                                className="relative h-[600px] group overflow-hidden shadow-2xl cursor-zoom-in animate-fade-in w-full text-right focus:outline-none focus:ring-4 focus:ring-copper"
+                                aria-label={`View project: ${post.userName} - ${CATEGORIES.find(c => c.id === post.category)?.label || 'Kitchen Design'}`}
                             >
                                 <img
                                     src={post.imageUrl}
@@ -179,7 +180,7 @@ export default function CommunityPage() {
 
                                 {/* Selection Border Overlay */}
                                 <div className="absolute inset-6 border border-white/0 group-hover:border-white/10 transition-all duration-700 pointer-events-none"></div>
-                            </div>
+                            </button>
                         ))}
                     </div>
                 ) : (

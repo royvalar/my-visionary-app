@@ -51,7 +51,10 @@ const DashboardPage = () => {
             // Compress image before upload
             const file = await compressImage(originalFile);
 
-            const storageRef = ref(storage, `community/${user.uid}/${Date.now()}_${file.name}`);
+            // Sanitize filename: Allow Hebrew (\u0590-\u05FF), English, numbers, dots, underscores, and hyphens.
+            // Remove everything else to prevent issues.
+            const sanitizedName = file.name.replace(/[^\u0590-\u05FFa-zA-Z0-9._-]/g, '_');
+            const storageRef = ref(storage, `community/${user.uid}/${Date.now()}_${sanitizedName}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
 
             uploadTask.on('state_changed',

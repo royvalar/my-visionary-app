@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Community Posts:
+    // - Public read access
+    // - Create only if authenticated and creating for self
+    match /community_posts/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      // Optional: Add update/delete rules if needed later, e.g.
+      // allow update, delete: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}
