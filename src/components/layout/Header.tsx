@@ -2,12 +2,21 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [user, setUser] = useState<User | null>(null);
+    const dropdownRef = useRef<HTMLLIElement>(null);
+    const router = useRouter();
 
     useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setIsOpen(false);
@@ -16,9 +25,24 @@ const Header = () => {
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
+            unsubscribe();
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const handleAuthClick = async () => {
+        if (user) {
+            router.push('/dashboard');
+        } else {
+            const provider = new GoogleAuthProvider();
+            try {
+                await signInWithPopup(auth, provider);
+                router.push('/dashboard');
+            } catch (error: any) {
+                console.error('Error during Google sign-in:', error.message);
+            }
+        }
+    };
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-white/5">
@@ -79,8 +103,11 @@ const Header = () => {
 
                 {/* Action (Left) */}
                 <div className="hidden lg:block">
-                    <button className="border border-copper/50 px-8 py-3 text-[11px] font-bold text-copper uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500 rounded-full">
-                        כניסה לאדריכלים/מעצבים
+                    <button
+                        onClick={handleAuthClick}
+                        className="border border-copper/50 px-8 py-3 text-[11px] font-bold text-copper uppercase tracking-widest hover:bg-copper hover:text-white transition-all duration-500 rounded-full"
+                    >
+                        {user ? 'אזור אישי' : 'כניסה לאדריכלים/מעצבים'}
                     </button>
                 </div>
             </div>

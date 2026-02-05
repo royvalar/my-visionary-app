@@ -5,6 +5,7 @@
   --color-offWhite: #E5E5E5;
   --color-copper: #B87333;
   --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: var(--font-playfair), Georgia, serif;
 }
 
 :root {
