@@ -29,7 +29,7 @@ const CATEGORIES = [
 const MOCK_POSTS: CommunityPost[] = [
     {
         id: 'mock1',
-        imageUrl: 'https://images.unsplash.com/photo-1556911220-e15224bbafb0?q=80&w=1470&auto=format&fit=crop',
+        imageUrl: '/community1.png',
         userId: 'mock',
         userName: 'דנה כהן עיצוב פנים',
         userPhoto: 'https://i.pravatar.cc/150?u=dana',
@@ -39,7 +39,7 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock2',
-        imageUrl: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=1470&auto=format&fit=crop',
+        imageUrl: '/matte_black_oven.png',
         userId: 'mock',
         userName: 'איתי לוי אדריכלות',
         userPhoto: 'https://i.pravatar.cc/150?u=itay',
@@ -49,7 +49,7 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock3',
-        imageUrl: 'https://images.unsplash.com/photo-1620027131048-fd4425c48855?q=80&w=1471&auto=format&fit=crop',
+        imageUrl: '/fridge.png',
         userId: 'mock',
         userName: 'מיכל רות פרידמן',
         userPhoto: 'https://i.pravatar.cc/150?u=michal',
@@ -59,7 +59,7 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock4',
-        imageUrl: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=1476&auto=format&fit=crop',
+        imageUrl: '/gessi_faucet.png',
         userId: 'mock',
         userName: 'קובי אדריכלים',
         userPhoto: 'https://i.pravatar.cc/150?u=kobi',
@@ -69,7 +69,7 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock5',
-        imageUrl: 'https://images.unsplash.com/photo-1520981755826-446a99ef99ac?q=80&w=1470&auto=format&fit=crop',
+        imageUrl: '/matte_black_hob.png',
         userId: 'mock',
         userName: 'ליטל עיצובים',
         userPhoto: 'https://i.pravatar.cc/150?u=lital',

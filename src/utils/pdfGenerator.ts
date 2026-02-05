@@ -36,14 +36,20 @@ export const generatePDF = async (elementId: string, filename: string) => {
     };
 
     try {
-        // We set the element to visible temporarily just for capture, 
-        // but since it's at -9999px it won't be seen by the user.
-        const originalStyle = element.style.display;
-        element.style.display = 'block';
+        // Wait for all images to load
+        const images = element.querySelectorAll('img');
+        await Promise.all(Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = resolve; // Don't fail the PDF if one image fails
+            });
+        }));
+
+        // Extra small delay to ensure rendering
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         await html2pdf().set(opt).from(element).save();
-
-        element.style.display = originalStyle;
     } catch (error) {
         console.error('PDF Generation Error:', error);
         throw error;
