@@ -97,7 +97,7 @@ export default function CommunityPage() {
                 });
 
                 if (fetchedPosts.length > 0) {
-                    setPosts(fetchedPosts);
+                    setPosts([...fetchedPosts, ...MOCK_POSTS]);
                 }
             } catch (error) {
                 console.error("Error fetching posts:", error);
