@@ -12,6 +12,7 @@ import { compressImage } from '@/utils/imageCompression';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import { collections, Collection } from '@/data/collections';
 import { uploadImageToCloudinary } from '@/services/cloudinary';
+import UserGallery from '@/components/dashboard/UserGallery';
 
 const DashboardPage = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -172,6 +173,8 @@ const DashboardPage = () => {
                         <a href="https://wa.me/972583614111" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-white transition-colors bg-copper/20 px-6 py-3 border border-copper/30 hover:bg-copper transition-all">שלח הודעה בוואטסאפ</a>
                     </div>
                 </div>
+
+                <UserGallery userId={user.uid} />
             </section>
 
             <Footer />

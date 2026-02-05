@@ -127,6 +127,29 @@ body {
   flex-direction: column;
 }
 
-.pdf-break {
-  page-break-before: always;
+
+/* Accessibility Widget Utilities */
+html.a11y-grayscale {
+  filter: grayscale(100%);
+}
+
+html.a11y-high-contrast {
+  filter: contrast(150%);
+}
+
+html.a11y-large-text {
+  font-size: 120%;
+}
+
+html.a11y-highlight-links a {
+  text-decoration: underline !important;
+  font-weight: bold !important;
+  background-color: #000 !important;
+  color: #ff0 !important;
+  outline: 2px solid #ff0 !important;
+}
+
+html.a11y-highlight-links a:hover {
+  background-color: #ff0 !important;
+  color: #000 !important;
 }

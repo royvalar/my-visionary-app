@@ -130,7 +130,7 @@ export default function Home() {
 
             <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="relative h-[600px] group overflow-hidden shadow-2xl">
-                <img src="/community1.png" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
+                <img src="/community1.png" alt="פרויקט דנה כהן - וילת יוקרה בהרצליה" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                 <div className="absolute bottom-10 right-10 text-right">
                   <span className="text-[10px] uppercase tracking-[0.3em] text-copper mb-2 block font-bold">Featured Project</span>
@@ -139,7 +139,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="relative h-[600px] group overflow-hidden shadow-2xl">
-                <img src="/community2.png" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
+                <img src="/community2.png" alt="פרויקט אדריכל אלון לוי - פנטהאוז בתל אביב" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                 <div className="absolute bottom-10 right-10 text-right">
                   <span className="text-[10px] uppercase tracking-[0.3em] text-copper mb-2 block font-bold">Architect Insight</span>

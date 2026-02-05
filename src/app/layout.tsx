@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Open_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import AccessibilityWidget from "@/components/AccessibilityWidget";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${openSans.variable} ${playfair.variable} font-sans antialiased`}
       >
         {children}
+        <AccessibilityWidget />
       </body>
     </html>
   );
