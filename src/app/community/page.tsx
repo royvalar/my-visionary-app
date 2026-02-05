@@ -146,43 +146,39 @@ export default function CommunityPage() {
             </section>
 
             {/* Gallery Grid */}
-            <section className="max-w-[1400px] mx-auto px-6 pb-20">
+            <section className="max-w-7xl mx-auto px-6 pb-20">
                 {loading && posts.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-40 gap-6">
                         <div className="w-12 h-12 border-t-2 border-copper rounded-full animate-spin"></div>
                         <p className="text-white/20 uppercase tracking-[0.3em] text-[10px] font-bold">טוען השראה...</p>
                     </div>
                 ) : filteredPosts.length > 0 ? (
-                    <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {filteredPosts.map((post) => (
                             <div
                                 key={post.id}
                                 onClick={() => setSelectedImage(post.imageUrl)}
-                                className="relative group cursor-zoom-in break-inside-avoid animate-fade-in"
+                                className="relative h-[600px] group overflow-hidden shadow-2xl cursor-zoom-in animate-fade-in"
                             >
-                                <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-all duration-700 z-10"></div>
                                 <img
                                     src={post.imageUrl}
                                     alt={post.userName}
-                                    className="w-full h-auto grayscale group-hover:grayscale-0 transition-all duration-1000 ease-out"
+                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 ease-out"
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
 
-                                {/* Post Info - Visible on Hover */}
-                                <div className="absolute inset-x-0 bottom-0 p-8 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-black via-black/80 to-transparent">
-                                    <div className="flex items-center gap-4">
-                                        {post.userPhoto && (
-                                            <img src={post.userPhoto} className="w-10 h-10 rounded-full border border-white/20" alt={post.userName} />
-                                        )}
-                                        <div className="text-right">
-                                            <p className="text-copper text-[10px] font-bold uppercase tracking-widest mb-1">Featured Architect</p>
-                                            <h3 className="text-white text-lg font-serif italic mb-1">{post.userName}</h3>
-                                            <p className="text-white/40 text-[10px] uppercase tracking-widest">{post.category || 'Kitchen Design'}</p>
-                                        </div>
-                                    </div>
+                                <div className="absolute bottom-10 right-10 text-right">
+                                    <span className="text-[10px] uppercase tracking-[0.3em] text-copper mb-2 block font-bold">
+                                        {post.category === 'Kitchen' ? 'Featured Project' : 'Designer Choice'}
+                                    </span>
+                                    <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-copper transition-colors duration-500">{post.userName}</h3>
+                                    <p className="text-[11px] text-offWhite/40 italic font-light">
+                                        {CATEGORIES.find(c => c.id === post.category)?.label || 'עיצוב מטבח'}
+                                    </p>
                                 </div>
 
-                                {/* Hover Border Overlay */}
-                                <div className="absolute inset-4 border border-white/0 group-hover:border-white/20 transition-all duration-700 z-15 pointer-events-none"></div>
+                                {/* Selection Border Overlay */}
+                                <div className="absolute inset-6 border border-white/0 group-hover:border-white/10 transition-all duration-700 pointer-events-none"></div>
                             </div>
                         ))}
                     </div>
