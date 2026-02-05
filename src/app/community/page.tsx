@@ -18,26 +18,67 @@ interface CommunityPost {
 }
 
 const CATEGORIES = [
-    { id: 'all', label: 'All Projects' },
-    { id: 'Architecture', label: 'Architecture' },
-    { id: 'Kitchen', label: 'Kitchen Design' },
-    { id: 'Living Room', label: 'Living Room' },
-    { id: 'Bathroom', label: 'Bathroom' },
-    { id: 'Outdoor', label: 'Outdoor' }
+    { id: 'all', label: 'הכל' },
+    { id: 'Ovens', label: 'תנורים' },
+    { id: 'Refrigerators', label: 'מקררים' },
+    { id: 'Faucets', label: 'ברזים וכיורים' },
+    { id: 'Hobs', label: 'כיריים' },
+    { id: 'Dishwashers', label: 'מדיחי כלים' }
+];
+
+const MOCK_POSTS: CommunityPost[] = [
+    {
+        id: 'mock1',
+        imageUrl: 'https://images.unsplash.com/photo-1556911220-e15224bbafb0?q=80&w=1470&auto=format&fit=crop',
+        userId: 'mock',
+        userName: 'דנה כהן עיצוב פנים',
+        userPhoto: 'https://i.pravatar.cc/150?u=dana',
+        createdAt: new Date(),
+        status: 'approved',
+        category: 'Kitchen'
+    },
+    {
+        id: 'mock2',
+        imageUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1470&auto=format&fit=crop',
+        userId: 'mock',
+        userName: 'איתי לוי אדריכלות',
+        userPhoto: 'https://i.pravatar.cc/150?u=itay',
+        createdAt: new Date(),
+        status: 'approved',
+        category: 'Ovens'
+    },
+    {
+        id: 'mock3',
+        imageUrl: 'https://images.unsplash.com/photo-1590623326779-88022a101f70?q=80&w=1470&auto=format&fit=crop',
+        userId: 'mock',
+        userName: 'מיכל רות פרידמן',
+        userPhoto: 'https://i.pravatar.cc/150?u=michal',
+        createdAt: new Date(),
+        status: 'approved',
+        category: 'Refrigerators'
+    },
+    {
+        id: 'mock4',
+        imageUrl: 'https://images.unsplash.com/photo-1610452392476-88062ec8571f?q=80&w=1471&auto=format&fit=crop',
+        userId: 'mock',
+        userName: 'קובי אדריכלים',
+        userPhoto: 'https://i.pravatar.cc/150?u=kobi',
+        createdAt: new Date(),
+        status: 'approved',
+        category: 'Faucets'
+    }
 ];
 
 export default function CommunityPage() {
-    const [posts, setPosts] = useState<CommunityPost[]>([]);
+    const [posts, setPosts] = useState<CommunityPost[]>(MOCK_POSTS);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchPosts = async () => {
-            setLoading(true);
             try {
                 const postsRef = collection(db, 'community_posts');
-                // For now fetching all approved or pending for demo, usually where('status', '==', 'approved')
                 const q = query(postsRef, orderBy('createdAt', 'desc'));
                 const querySnapshot = await getDocs(q);
                 let fetchedPosts: CommunityPost[] = [];
@@ -45,43 +86,9 @@ export default function CommunityPage() {
                     fetchedPosts.push({ id: doc.id, ...doc.data() } as CommunityPost);
                 });
 
-                // Mock data if empty
-                if (fetchedPosts.length === 0) {
-                    fetchedPosts = [
-                        {
-                            id: 'mock1',
-                            imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1470&auto=format&fit=crop',
-                            userId: 'mock',
-                            userName: 'דנה כהן עיצוב פנים',
-                            userPhoto: 'https://i.pravatar.cc/150?u=dana',
-                            createdAt: new Date(),
-                            status: 'approved',
-                            category: 'Kitchen'
-                        },
-                        {
-                            id: 'mock2',
-                            imageUrl: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1374&auto=format&fit=crop',
-                            userId: 'mock',
-                            userName: 'איתי לוי אדריכלות',
-                            userPhoto: 'https://i.pravatar.cc/150?u=itay',
-                            createdAt: new Date(),
-                            status: 'approved',
-                            category: 'Architecture'
-                        },
-                        {
-                            id: 'mock3',
-                            imageUrl: 'https://images.unsplash.com/photo-1620027131048-fd4425c48855?q=80&w=1471&auto=format&fit=crop',
-                            userId: 'mock',
-                            userName: 'מיכל רות פרידמן',
-                            userPhoto: 'https://i.pravatar.cc/150?u=michal',
-                            createdAt: new Date(),
-                            status: 'approved',
-                            category: 'Living Room'
-                        }
-                    ];
+                if (fetchedPosts.length > 0) {
+                    setPosts(fetchedPosts);
                 }
-
-                setPosts(fetchedPosts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
             }
@@ -96,14 +103,14 @@ export default function CommunityPage() {
         : posts.filter(post => post.category === selectedCategory);
 
     return (
-        <main className="min-h-screen bg-black text-offWhite selection:bg-copper selection:text-white">
+        <main className="min-h-screen bg-black text-offWhite selection:bg-copper selection:text-white pb-20">
             <Header />
 
             {/* Hero Section */}
             <header className="pt-40 pb-20 px-6 text-center">
                 <div className="max-w-4xl mx-auto animate-fade-in-up">
                     <p className="text-copper mb-4 tracking-[0.4em] uppercase text-xs font-bold">Designer Community</p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-bold mb-8 text-white italic">קולות מהשטח: הקהילה שלנו</h1>
+                    <h1 className="text-4xl md:text-6xl font-serif font-bold mb-8 text-white italic whitespace-nowrap overflow-hidden text-ellipsis">קולות מהשטח: הקהילה שלנו</h1>
                     <p className="text-lg font-light tracking-wide max-w-2xl mx-auto text-offWhite/50 leading-relaxed">
                         מקום המפגש של האדריכלים והמעצבים המובילים בישראל. השראה, יצירה וחדשנות בחלל אחד.
                     </p>
@@ -118,8 +125,8 @@ export default function CommunityPage() {
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id)}
                             className={`px-6 py-2 text-[10px] uppercase font-bold tracking-widest transition-all duration-300 rounded-full border ${selectedCategory === cat.id
-                                ? 'bg-copper border-copper text-white'
-                                : 'bg-transparent border-white/10 text-white/40 hover:border-white/30 hover:text-white'
+                                    ? 'bg-copper border-copper text-white'
+                                    : 'bg-transparent border-white/10 text-white/40 hover:border-white/30 hover:text-white'
                                 }`}
                         >
                             {cat.label}
@@ -129,8 +136,8 @@ export default function CommunityPage() {
             </section>
 
             {/* Gallery Grid */}
-            <section className="max-w-[1400px] mx-auto px-6 pb-40">
-                {loading ? (
+            <section className="max-w-[1400px] mx-auto px-6 pb-20">
+                {loading && posts.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-40 gap-6">
                         <div className="w-12 h-12 border-t-2 border-copper rounded-full animate-spin"></div>
                         <p className="text-white/20 uppercase tracking-[0.3em] text-[10px] font-bold">טוען השראה...</p>
@@ -159,7 +166,7 @@ export default function CommunityPage() {
                                         <div className="text-right">
                                             <p className="text-copper text-[10px] font-bold uppercase tracking-widest mb-1">Featured Architect</p>
                                             <h3 className="text-white text-lg font-serif italic mb-1">{post.userName}</h3>
-                                            <p className="text-white/40 text-[10px] uppercase tracking-widest">{post.category || 'Project Detail'}</p>
+                                            <p className="text-white/40 text-[10px] uppercase tracking-widest">{post.category || 'Kitchen Design'}</p>
                                         </div>
                                     </div>
                                 </div>
