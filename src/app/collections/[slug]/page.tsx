@@ -1,20 +1,15 @@
-'use client';
-
-import React, { useState } from "react";
+import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { collections } from "@/data/collections";
 import { notFound } from "next/navigation";
+import DownloadCatalogButton from "@/components/ui/DownloadCatalogButton";
 
 export default async function CollectionPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
 
     // Find Collection Data
     const collection = collections.find(c => c.slug === slug);
-
-    const handleDownloadPDF = () => {
-        alert("קטלוג PDF יהיה זמין להורדה בקרוב!");
-    };
 
     if (!collection) return notFound();
 
@@ -34,12 +29,10 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
                         {collection.description}
                     </p>
                     <div className="mt-12">
-                        <button
-                            onClick={handleDownloadPDF}
+                        <DownloadCatalogButton
+                            label="הורד קטלוג PDF מלא"
                             className="inline-block border border-copper text-copper px-10 py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-copper hover:text-white transition-all duration-500 rounded-full disabled:opacity-50"
-                        >
-                            הורד קטלוג PDF מלא
-                        </button>
+                        />
                     </div>
                 </div>
             </header>
