@@ -2,6 +2,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { collections } from "@/data/collections";
 import Link from "next/link";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 export default function Home() {
   return (
@@ -119,9 +120,11 @@ export default function Home() {
               <div className="bg-copper/10 border border-copper/30 p-12 text-right">
                 <h4 className="text-xl font-bold mb-4 text-copper italic tracking-tight">הצטרפות למועדון האדריכלים והמעצבים</h4>
                 <p className="text-sm mb-10 text-offWhite/70 leading-relaxed font-light">קבלו גישה לכלים תכנוניים, קטלוגים מאוגדים וייעוץ אישי לבניית קולקציות מותאמות לקוח.</p>
-                <button className="w-full bg-copper py-5 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all shadow-xl">
-                  הרשמה לקהילה
-                </button>
+                <div className="flex justify-end">
+                  <div className="w-full">
+                    <GoogleSignInButton />
+                  </div>
+                </div>
               </div>
             </div>
 
