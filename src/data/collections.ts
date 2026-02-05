@@ -29,7 +29,7 @@ export const collections: Collection[] = [
         tagline: "Exquisite Metalwork",
         subtitle: "Metallic Warmth & Elegance",
         description: "קולקציית Rose Gold מאגדת את פסגת העיצוב האיטלקי והגרמני תחת גוון הנחושת והזהב הוורוד. מהתנורים האיקוניים של Bertazzoni ועד לפרזול המדויק של Gessi.",
-        heroImage: "https://images.unsplash.com/photo-1520981825232-ece5fae45120?q=80&w=1470&auto=format&fit=crop",
+        heroImage: "/rose_gold_hero_new.png",
         image: "/oven.png",
         link: "/collections/rose-gold",
         brands: ["Bertazzoni", "Smeg", "Gessi"],
