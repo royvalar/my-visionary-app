@@ -34,8 +34,7 @@ const UserGallery: React.FC<UserGalleryProps> = ({ userId }) => {
                 // If query fails, check console for Firebase index creation link.
                 const q = query(
                     postsRef,
-                    where('userId', '==', userId),
-                    orderBy('createdAt', 'desc')
+                    where('userId', '==', userId)
                 );
 
                 const querySnapshot = await getDocs(q);
@@ -43,6 +42,14 @@ const UserGallery: React.FC<UserGalleryProps> = ({ userId }) => {
                 querySnapshot.forEach((doc) => {
                     userPosts.push({ id: doc.id, ...doc.data() } as CommunityPost);
                 });
+
+                // Sort client-side to avoid index requirement for now
+                userPosts.sort((a, b) => {
+                    const timeA = a.createdAt?.seconds || 0;
+                    const timeB = b.createdAt?.seconds || 0;
+                    return timeB - timeA;
+                });
+
                 setPosts(userPosts);
             } catch (error) {
                 console.error("Error fetching user posts:", error);
@@ -54,14 +61,14 @@ const UserGallery: React.FC<UserGalleryProps> = ({ userId }) => {
         fetchUserPosts();
     }, [userId]);
 
-    const handleDelete = async (postId: string) => {
+    const handleDelete = async (post: CommunityPost) => {
         if (!window.confirm("האם אתה בטוח שברצונך למחוק תמונה זו?")) return;
 
-        setDeletingId(postId);
+        setDeletingId(post.id);
         try {
-            await deleteDoc(doc(db, 'community_posts', postId));
-            setPosts(prev => prev.filter(post => post.id !== postId));
-        } catch (error) {
+            await deleteDoc(doc(db, 'community_posts', post.id));
+            setPosts(prev => prev.filter(p => p.id !== post.id));
+        } catch (error: any) {
             console.error("Error deleting post:", error);
             alert("שגיאה במחיקת התמונה. אנא נסה שנית.");
         } finally {
@@ -100,7 +107,7 @@ const UserGallery: React.FC<UserGalleryProps> = ({ userId }) => {
 
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                             <button
-                                onClick={() => handleDelete(post.id)}
+                                onClick={() => handleDelete(post)}
                                 disabled={deletingId === post.id}
                                 className="bg-red-900/80 hover:bg-red-700 text-white text-[10px] uppercase tracking-[0.2em] font-bold py-2 px-4 border border-red-500/30 backdrop-blur-sm transition-all"
                             >
@@ -111,8 +118,8 @@ const UserGallery: React.FC<UserGalleryProps> = ({ userId }) => {
                         {/* Status Badge */}
                         <div className="absolute top-2 right-2">
                             <span className={`text-[9px] uppercase tracking-widest font-bold px-2 py-1 bg-black/80 backdrop-blur-md border ${post.status === 'approved' ? 'text-green-500 border-green-500/30' :
-                                    post.status === 'rejected' ? 'text-red-500 border-red-500/30' :
-                                        'text-yellow-500 border-yellow-500/30'
+                                post.status === 'rejected' ? 'text-red-500 border-red-500/30' :
+                                    'text-yellow-500 border-yellow-500/30'
                                 }`}>
                                 {post.status === 'approved' ? 'אושר' : post.status === 'rejected' ? 'נדחה' : 'ממתין'}
                             </span>

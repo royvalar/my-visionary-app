@@ -36,8 +36,8 @@ const Footer = () => {
                 <div className="mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-offWhite/20 uppercase tracking-[0.3em] font-bold">
                     <p>© 2026 My Visionary Collective. All rights reserved.</p>
                     <div className="flex gap-12">
-                        <Link href="#" className="hover:text-copper transition-colors">Privacy Policy</Link>
-                        <Link href="#" className="hover:text-copper transition-colors">Terms of Service</Link>
+                        <Link href="/privacy" className="hover:text-copper transition-colors">מדיניות פרטיות</Link>
+                        <Link href="/terms" className="hover:text-copper transition-colors">תנאי שימוש</Link>
                     </div>
                 </div>
             </div>

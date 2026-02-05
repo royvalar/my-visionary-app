@@ -21,7 +21,15 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Analytics is only supported in browser environments
-const analytics = typeof window !== 'undefined' ? isSupported().then(yes => yes ? getAnalytics(app) : null) : null;
+// Analytics is only supported in browser environments and requires user consent
+const analytics = typeof window !== 'undefined' ? isSupported().then(yes => {
+    if (!yes) return null;
+
+    // Check for cookie consent
+    const consentStr = localStorage.getItem('cookie-consent');
+    const isAnalyticsAllowed = consentStr ? JSON.parse(consentStr).analytics : false;
+
+    return isAnalyticsAllowed ? getAnalytics(app) : null;
+}) : null;
 
 export { app, auth, db, analytics };
