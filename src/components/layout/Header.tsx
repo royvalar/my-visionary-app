@@ -131,6 +131,7 @@ const Header = () => {
                                     <img
                                         src={user.photoURL}
                                         alt={user.displayName || ''}
+                                        referrerPolicy="no-referrer"
                                         className="w-10 h-10 rounded-full border-2 border-white/10 group-hover:border-copper transition-all object-cover grayscale group-hover:grayscale-0 shadow-lg"
                                     />
                                 )}

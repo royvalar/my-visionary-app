@@ -10,8 +10,6 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { compressImage } from '@/utils/imageCompression';
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
-import PDFCatalogTemplate from '@/components/pdf/PDFCatalogTemplate';
-import { generatePDF } from '@/utils/pdfGenerator';
 import { collections, Collection } from '@/data/collections';
 import { uploadImageToCloudinary } from '@/services/cloudinary';
 
@@ -21,9 +19,13 @@ const DashboardPage = () => {
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadSuccess, setUploadSuccess] = useState(false);
-    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
     const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
     const router = useRouter();
+
+    const handleDownloadPDF = (collection: Collection) => {
+        alert("קטלוג PDF יהיה זמין להורדה בקרוב!");
+    };
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -75,23 +77,6 @@ const DashboardPage = () => {
         }
     };
 
-    const handleDownloadPDF = async (collection: Collection) => {
-        setIsGeneratingPDF(true);
-        setSelectedCollection(collection);
-
-        // Give time for the hidden template to render
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        try {
-            await generatePDF('pdf-template', `MyVisionary_${collection.slug}_Catalog`);
-        } catch (error) {
-            console.error('Failed to generate PDF:', error);
-            alert('מצטערים, חלה שגיאה בייצור הקטלוג. אנא נסה שוב.');
-        } finally {
-            setIsGeneratingPDF(false);
-            setSelectedCollection(null);
-        }
-    };
 
     if (loading) {
         return (
@@ -114,6 +99,7 @@ const DashboardPage = () => {
                             <img
                                 src={user.photoURL}
                                 alt={user.displayName || 'User'}
+                                referrerPolicy="no-referrer"
                                 className="w-32 h-32 rounded-full border-2 border-copper p-1 object-cover grayscale hover:grayscale-0 transition-all duration-700"
                             />
                             <div className="absolute -bottom-2 -right-2 bg-copper w-6 h-6 rounded-full border-2 border-black"></div>
@@ -167,7 +153,6 @@ const DashboardPage = () => {
                                     key={coll.id}
                                     onClick={() => handleDownloadPDF(coll)}
                                     className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-white transition-colors border border-white/10 px-3 py-1 hover:border-copper cursor-pointer disabled:opacity-50"
-                                    disabled={isGeneratingPDF}
                                 >
                                     {coll.name.replace(' Collection', '')}
                                 </button>
@@ -191,11 +176,8 @@ const DashboardPage = () => {
 
             <Footer />
 
-            {/* Hidden PDF Template and Overlay */}
-            {selectedCollection && (
-                <PDFCatalogTemplate collection={selectedCollection} />
-            )}
-            <LoadingOverlay isVisible={isGeneratingPDF} />
+            {/* Loading Overlay */}
+            {loading && <LoadingOverlay isVisible={loading} />}
         </main>
     );
 };
