@@ -24,9 +24,10 @@ export const generatePDF = async (elementId: string, filename: string) => {
     clone.style.width = '210mm'; // Ensure A4 width
     clone.style.zIndex = '-9999'; // Behind everything
     clone.style.display = 'block'; // Make sure it's block
-    clone.id = 'pdf-clone-temp'; // Prevent ID conflicts if possible, though deep clones keep IDs
+    clone.id = 'pdf-clone-temp'; // Prevent ID conflicts
 
     document.body.appendChild(clone);
+    console.log('PDF Generator: Template clone appended to body');
 
     const opt = {
         margin: 0,
@@ -50,25 +51,47 @@ export const generatePDF = async (elementId: string, filename: string) => {
     };
 
     try {
-        // Wait for all images in the CLONE to load
-        const images = clone.querySelectorAll('img');
-        await Promise.all(Array.from(images).map(img => {
-            if (img.complete) return Promise.resolve();
-            return new Promise((resolve) => {
-                img.onload = resolve;
-                img.onerror = resolve; // Don't fail the PDF if one image fails
-            });
+        // 1. Wait for all images in the CLONE to load
+        console.log('PDF Generator: Checking images...');
+        const images = Array.from(clone.querySelectorAll('img'));
+
+        await Promise.all(images.map(async (img) => {
+            if (img.complete && img.naturalHeight !== 0) return;
+
+            try {
+                // Try decoding first if supported
+                if (img.decode) {
+                    await img.decode();
+                } else {
+                    // Fallback to onload
+                    await new Promise((resolve, reject) => {
+                        img.onload = resolve;
+                        img.onerror = resolve; // Don't fail the PDF if one image fails
+                        // Timeout after 5s to prevent hanging
+                        setTimeout(resolve, 5000);
+                    });
+                }
+            } catch (e) {
+                console.warn('PDF Generator: Image load warning', e);
+            }
         }));
+        console.log(`PDF Generator: All ${images.length} images loaded/checked`);
 
-        // Extra small delay to ensure rendering of the clone
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // 2. Delay Capture to allow layout engine to settle
+        console.log('PDF Generator: Waiting for layout...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
+        // 3. Start Capture
+        console.log('PDF Generator: Starting html2pdf capture...');
         await html2pdf().set(opt).from(clone).save();
+        console.log('PDF Generator: Capture complete');
+
     } catch (error) {
         console.error('PDF Generation Error:', error);
         throw error;
     } finally {
         // Always clean up the clone
         document.body.removeChild(clone);
+        console.log('PDF Generator: Clone removed');
     }
 };

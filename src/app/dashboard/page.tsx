@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth, db, storage } from '@/lib/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { auth, db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/layout/Header';
@@ -14,6 +13,7 @@ import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import PDFCatalogTemplate from '@/components/pdf/PDFCatalogTemplate';
 import { generatePDF } from '@/utils/pdfGenerator';
 import { collections, Collection } from '@/data/collections';
+import { uploadImageToCloudinary } from '@/services/cloudinary';
 
 const DashboardPage = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -38,54 +38,40 @@ const DashboardPage = () => {
         return () => unsubscribe();
     }, [router]);
 
-
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const originalFile = e.target.files?.[0];
         if (!originalFile || !user) return;
 
         setUploading(true);
         setUploadSuccess(false);
-        setUploadProgress(0);
+        setUploadProgress(10); // Start progress
 
         try {
             // Compress image before upload
             const file = await compressImage(originalFile);
+            setUploadProgress(30);
 
-            // Sanitize filename: Allow Hebrew (\u0590-\u05FF), English, numbers, dots, underscores, and hyphens.
-            // Remove everything else to prevent issues.
-            const sanitizedName = file.name.replace(/[^\u0590-\u05FFa-zA-Z0-9._-]/g, '_');
-            const storageRef = ref(storage, `community/${user.uid}/${Date.now()}_${sanitizedName}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            // Upload to Cloudinary
+            const downloadURL = await uploadImageToCloudinary(file);
+            setUploadProgress(70);
 
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setUploadProgress(progress);
-                },
-                (error) => {
-                    console.error("Upload error:", error);
-                    setUploading(false);
-                },
-                async () => {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            await addDoc(collection(db, 'community_posts'), {
+                imageUrl: downloadURL,
+                userId: user.uid,
+                userName: user.displayName,
+                userPhoto: user.photoURL,
+                createdAt: serverTimestamp(),
+                status: 'pending' // For moderation
+            });
 
-                    await addDoc(collection(db, 'community_posts'), {
-                        imageUrl: downloadURL,
-                        userId: user.uid,
-                        userName: user.displayName,
-                        userPhoto: user.photoURL,
-                        createdAt: serverTimestamp(),
-                        status: 'pending' // For moderation
-                    });
-
-                    setUploading(false);
-                    setUploadSuccess(true);
-                    setTimeout(() => setUploadSuccess(false), 5000);
-                }
-            );
-        } catch (error) {
-            console.error("Compression/Upload setup error:", error);
+            setUploadProgress(100);
             setUploading(false);
+            setUploadSuccess(true);
+            setTimeout(() => setUploadSuccess(false), 5000);
+        } catch (error) {
+            console.error("Upload/Compression error:", error);
+            setUploading(false);
+            alert("Error uploading image. Please try again.");
         }
     };
 
