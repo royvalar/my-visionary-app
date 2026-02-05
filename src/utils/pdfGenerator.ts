@@ -29,10 +29,10 @@ export const generatePDF = async (elementId: string, filename: string) => {
         jsPDF: {
             unit: 'mm',
             format: 'a4',
-            orientation: 'portrait',
+            orientation: 'portrait' as const,
             compress: true
         },
-        pagebreak: { mode: ['css', 'legacy'] } // Respect .pdf-break class
+        pagebreak: { mode: ['css', 'legacy'] as const } // Respect .pdf-break class
     };
 
     try {

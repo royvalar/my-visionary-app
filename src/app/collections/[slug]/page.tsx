@@ -5,7 +5,6 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { collections } from "@/data/collections";
 import { notFound } from "next/navigation";
-import { useState } from "react";
 import LoadingOverlay from "@/components/ui/LoadingOverlay";
 import PDFCatalogTemplate from "@/components/pdf/PDFCatalogTemplate";
 import { generatePDF } from "@/utils/pdfGenerator";
