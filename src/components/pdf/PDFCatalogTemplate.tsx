@@ -12,7 +12,7 @@ const PDFCatalogTemplate: React.FC<PDFCatalogTemplateProps> = ({ collection }) =
     const black = '#050505';
 
     return (
-        <div id="pdf-template" className="pdf-container overflow-hidden" dir="rtl" style={{ position: 'fixed', left: '0', top: '0', zIndex: 9998, backgroundColor: 'white', color: black, width: '210mm', height: '100vh', overflowY: 'auto' }}>
+        <div id="pdf-template" className="pdf-container" dir="rtl" style={{ position: 'absolute', left: '-215mm', top: '0', zIndex: -50, backgroundColor: 'white', color: black, width: '210mm', minHeight: '100%', overflow: 'visible' }}>
             {/* Cover Page */}
             <div className="pdf-page justify-center items-center text-center relative overflow-hidden" style={{ backgroundColor: black, color: 'white', padding: '20mm', minHeight: '297mm', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <div className="absolute inset-0" style={{ backgroundImage: `url('${collection.heroImage || collection.image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.2, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
