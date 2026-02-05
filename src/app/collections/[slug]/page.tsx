@@ -1,15 +1,38 @@
+'use client';
+
+import React, { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { collections } from "@/data/collections";
 import { notFound } from "next/navigation";
+import { useState } from "react";
+import LoadingOverlay from "@/components/ui/LoadingOverlay";
+import PDFCatalogTemplate from "@/components/pdf/PDFCatalogTemplate";
+import { generatePDF } from "@/utils/pdfGenerator";
 
-export default async function CollectionPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
+export default function CollectionPage({ params }: { params: any }) {
+    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const { slug } = React.use(params) as { slug: string };
     const collection = collections.find((c) => c.slug === slug);
 
     if (!collection) {
         notFound();
     }
+
+    const handleDownloadPDF = async () => {
+        setIsGeneratingPDF(true);
+        // Give time for the hidden template to render
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        try {
+            await generatePDF('pdf-template', `MyVisionary_${collection.slug}_Catalog`);
+        } catch (error) {
+            console.error('Failed to generate PDF:', error);
+            alert('מצטערים, חלה שגיאה בייצור הקטלוג. אנא נסה שוב.');
+        } finally {
+            setIsGeneratingPDF(false);
+        }
+    };
 
     return (
         <main className="min-h-screen bg-black text-offWhite selection:bg-copper selection:text-white">
@@ -26,6 +49,15 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
                     <p className="text-lg md:text-xl font-light tracking-wide max-w-2xl mx-auto text-offWhite/70">
                         {collection.description}
                     </p>
+                    <div className="mt-12">
+                        <button
+                            onClick={handleDownloadPDF}
+                            disabled={isGeneratingPDF}
+                            className="inline-block border border-copper text-copper px-10 py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-copper hover:text-white transition-all duration-500 rounded-full disabled:opacity-50"
+                        >
+                            הורד קטלוג PDF מלא
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -59,6 +91,14 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
             </div>
 
             <Footer />
+
+            {/* Hidden PDF Template and Overlay */}
+            {isGeneratingPDF && (
+                <>
+                    <PDFCatalogTemplate collection={collection} />
+                    <LoadingOverlay isVisible={isGeneratingPDF} />
+                </>
+            )}
         </main>
     );
 }

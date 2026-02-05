@@ -39,7 +39,7 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock2',
-        imageUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1470&auto=format&fit=crop',
+        imageUrl: 'https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=1470&auto=format&fit=crop',
         userId: 'mock',
         userName: 'איתי לוי אדריכלות',
         userPhoto: 'https://i.pravatar.cc/150?u=itay',
@@ -49,7 +49,7 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock3',
-        imageUrl: 'https://images.unsplash.com/photo-1590623326779-88022a101f70?q=80&w=1470&auto=format&fit=crop',
+        imageUrl: 'https://images.unsplash.com/photo-1620027131048-fd4425c48855?q=80&w=1471&auto=format&fit=crop',
         userId: 'mock',
         userName: 'מיכל רות פרידמן',
         userPhoto: 'https://i.pravatar.cc/150?u=michal',
@@ -59,13 +59,23 @@ const MOCK_POSTS: CommunityPost[] = [
     },
     {
         id: 'mock4',
-        imageUrl: 'https://images.unsplash.com/photo-1610452392476-88062ec8571f?q=80&w=1471&auto=format&fit=crop',
+        imageUrl: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=1476&auto=format&fit=crop',
         userId: 'mock',
         userName: 'קובי אדריכלים',
         userPhoto: 'https://i.pravatar.cc/150?u=kobi',
         createdAt: new Date(),
         status: 'approved',
         category: 'Faucets'
+    },
+    {
+        id: 'mock5',
+        imageUrl: 'https://images.unsplash.com/photo-1520981755826-446a99ef99ac?q=80&w=1470&auto=format&fit=crop',
+        userId: 'mock',
+        userName: 'ליטל עיצובים',
+        userPhoto: 'https://i.pravatar.cc/150?u=lital',
+        createdAt: new Date(),
+        status: 'approved',
+        category: 'Hobs'
     }
 ];
 
@@ -125,8 +135,8 @@ export default function CommunityPage() {
                             key={cat.id}
                             onClick={() => setSelectedCategory(cat.id)}
                             className={`px-6 py-2 text-[10px] uppercase font-bold tracking-widest transition-all duration-300 rounded-full border ${selectedCategory === cat.id
-                                    ? 'bg-copper border-copper text-white'
-                                    : 'bg-transparent border-white/10 text-white/40 hover:border-white/30 hover:text-white'
+                                ? 'bg-copper border-copper text-white'
+                                : 'bg-transparent border-white/10 text-white/40 hover:border-white/30 hover:text-white'
                                 }`}
                         >
                             {cat.label}

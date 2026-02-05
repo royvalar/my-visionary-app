@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { onAuthStateChanged, User, signOut } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth, db, storage } from '@/lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -10,6 +10,10 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { compressImage } from '@/utils/imageCompression';
+import LoadingOverlay from '@/components/ui/LoadingOverlay';
+import PDFCatalogTemplate from '@/components/pdf/PDFCatalogTemplate';
+import { generatePDF } from '@/utils/pdfGenerator';
+import { collections, Collection } from '@/data/collections';
 
 const DashboardPage = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -17,6 +21,8 @@ const DashboardPage = () => {
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -32,14 +38,6 @@ const DashboardPage = () => {
         return () => unsubscribe();
     }, [router]);
 
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            router.push('/');
-        } catch (error: any) {
-            console.error('Error signing out:', error.message);
-        }
-    };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const originalFile = e.target.files?.[0];
@@ -88,6 +86,24 @@ const DashboardPage = () => {
         }
     };
 
+    const handleDownloadPDF = async (collection: Collection) => {
+        setIsGeneratingPDF(true);
+        setSelectedCollection(collection);
+
+        // Give time for the hidden template to render
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        try {
+            await generatePDF('pdf-template', `MyVisionary_${collection.slug}_Catalog`);
+        } catch (error) {
+            console.error('Failed to generate PDF:', error);
+            alert('מצטערים, חלה שגיאה בייצור הקטלוג. אנא נסה שוב.');
+        } finally {
+            setIsGeneratingPDF(false);
+            setSelectedCollection(null);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
@@ -121,14 +137,7 @@ const DashboardPage = () => {
                         </h1>
                         <p className="text-offWhite/40 font-light text-sm tracking-widest uppercase">מעצב פנים / אדריכל רשום</p>
                     </div>
-                    <div>
-                        <button
-                            onClick={handleLogout}
-                            className="border border-white/10 px-8 py-3 text-[10px] uppercase tracking-widest hover:border-copper hover:text-copper transition-all"
-                        >
-                            התנתקות
-                        </button>
-                    </div>
+
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -164,9 +173,16 @@ const DashboardPage = () => {
                         <p className="text-sm text-offWhite/40 font-light leading-relaxed mb-8">צפה והורד את קטלוגי המותגים והקולקציות שלנו לשימוש מקצועי.</p>
                         <div className="h-px bg-white/5 mb-8 group-hover:bg-copper/20 transition-all"></div>
                         <div className="flex flex-wrap gap-4">
-                            <Link href="/collections/rose-gold" className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-white transition-colors border border-white/10 px-3 py-1 hover:border-copper">Rose Gold</Link>
-                            <Link href="/collections/retro-classic" className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-white transition-colors border border-white/10 px-3 py-1 hover:border-copper">Retro Classic</Link>
-                            <Link href="/collections/matte-black" className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-white transition-colors border border-white/10 px-3 py-1 hover:border-copper">Matte Black</Link>
+                            {collections.map((coll) => (
+                                <button
+                                    key={coll.id}
+                                    onClick={() => handleDownloadPDF(coll)}
+                                    className="text-[10px] uppercase tracking-[0.2em] font-bold hover:text-white transition-colors border border-white/10 px-3 py-1 hover:border-copper cursor-pointer disabled:opacity-50"
+                                    disabled={isGeneratingPDF}
+                                >
+                                    {coll.name.replace(' Collection', '')}
+                                </button>
+                            ))}
                         </div>
                     </div>
 
@@ -185,6 +201,12 @@ const DashboardPage = () => {
             </section>
 
             <Footer />
+
+            {/* Hidden PDF Template and Overlay */}
+            {selectedCollection && (
+                <PDFCatalogTemplate collection={selectedCollection} />
+            )}
+            <LoadingOverlay isVisible={isGeneratingPDF} />
         </main>
     );
 };

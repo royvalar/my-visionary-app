@@ -121,8 +121,8 @@ const Header = () => {
                                 className="flex items-center gap-3 bg-white/[0.03] border border-white/10 hover:border-copper/50 transition-all duration-300 px-5 py-2 rounded-full group min-w-fit"
                             >
                                 <div className="text-right whitespace-nowrap flex flex-row items-center gap-2">
-                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold leading-none">Hello,</p>
                                     <p className="text-[12px] text-white font-bold tracking-wider">{user.displayName}</p>
+                                    <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold leading-none">,Hello</p>
                                 </div>
                                 {user.photoURL && (
                                     <img
